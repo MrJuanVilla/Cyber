@@ -164,8 +164,8 @@ public class Cyber {
                             if (threadPool[id].isAlive() && !threadPool[id].isInterrupted()) {
                                 if (classesPool[id] != null) {
                                     classesPool[id].BlockSignal();
-                                    if(temp.getText().equals("Start")) temp.setText("Stop");
-                                    else temp.setText("Start");
+                                    if(classesPool[id].isBlock) temp.setText("Start");
+                                    else temp.setText("Stop");
                                 }
                             }
                         }

@@ -13,11 +13,13 @@ public class connectionHandler implements Runnable {
     private Cyber father = null;
     private BufferedReader is = null;
     private BufferedWriter os = null;
+    public boolean isBlock;
 
     connectionHandler(Socket clientSocket, int computerId, Cyber father) {
         this.clientSocket = clientSocket;
         this.computerId = computerId;
         this.father = father;
+        this.isBlock = false;
         try {
             is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             os = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
