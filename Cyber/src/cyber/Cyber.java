@@ -84,6 +84,9 @@ public class Cyber {
     }
     
     private static JPanel[] comps;
+    private static JButton[] btns;
+    private static JLabel[] timers;
+    
     private static JPanel mainPanel;
 
     public void InitGUI() throws IOException {
@@ -99,11 +102,13 @@ public class Cyber {
 
         BufferedImage image = ImageIO.read(Cyber.class.getResource("/comp.png"));
         comps = new JPanel[threadPool.length];
+        btns = new JButton[threadPool.length];
+        timers = new JLabel[threadPool.length];
+        
         for (int i = 0; i < comps.length; i++) {
             comps[i] = createCompController(image, i);
             c.gridx = i % 4;
             c.gridy = i / 4;
-            //JPanel label
             JPanel container = new JPanel();
             container.setBorder(BorderFactory.createTitledBorder("Comp" + (i + 1)));
             container.setPreferredSize(new Dimension(190,220));
@@ -120,6 +125,8 @@ public class Cyber {
 
     public void hideGUI(int index){
         comps[index].setVisible(false);
+        btns[index].setText("Start");
+        timers[index].setText("");
     }
     
     public JPanel createCompController(BufferedImage image, int index) {
@@ -143,20 +150,20 @@ public class Cyber {
         subPanel.add(new JButton("$"));
         subPanel.setAlignmentY(SwingConstants.CENTER);
         
-        JLabel timer =  new JLabel("");
-        timer.setAlignmentY(SwingConstants.CENTER);
+        timers[index] =  new JLabel("");
+        timers[index].setAlignmentY(SwingConstants.CENTER);
         
-        cellPanel.add(timer,BorderLayout.NORTH);
+        cellPanel.add(timers[index],BorderLayout.NORTH);
         cellPanel.add(temp,BorderLayout.CENTER);
         cellPanel.add(subPanel, BorderLayout.SOUTH);
         return cellPanel;
     }
 
     public JButton pauseButton(int id) {
-        JButton temp = new JButton();
-        temp.setText("Start");
-        temp.setBounds(new Rectangle(10,40));
-        temp.addActionListener(
+        btns[id] = new JButton();
+        btns[id].setText("Start");
+        btns[id].setBounds(new Rectangle(10,40));
+        btns[id].addActionListener(
                 new CustomListener(id) {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -164,15 +171,13 @@ public class Cyber {
                             if (threadPool[id].isAlive() && !threadPool[id].isInterrupted()) {
                                 if (classesPool[id] != null) {
                                     classesPool[id].BlockSignal();
-                                    if(classesPool[id].isBlock) temp.setText("Start");
-                                    else temp.setText("Stop");
                                 }
                             }
                         }
                     }
                 }
         );
-        return temp;
+        return btns[id];
     }
 }
 
