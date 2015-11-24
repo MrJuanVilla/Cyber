@@ -10,46 +10,58 @@ public class connectionHandler implements Runnable {
     public static Logger Log = Logger.getLogger(connectionHandler.class.getName());
     private final Socket clientSocket;
     private final int computerId;
-    BufferedReader is = null;
-    BufferedWriter os = null;
+    private Cyber father = null;
+    private BufferedReader is = null;
+    private BufferedWriter os = null;
 
-    connectionHandler(Socket clientSocket, int computerId) {
+    connectionHandler(Socket clientSocket, int computerId, Cyber father) {
         this.clientSocket = clientSocket;
         this.computerId = computerId;
-    }
-
-    public void run() {
-        System.out.println("Run Started");
+        this.father = father;
         try {
             is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             os = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
-            /*Area de comunicacion entre sockets.
-            String nextline;
-
-            nextline = is.readLine();
-            if (nextline != null) {
-                System.out.println("Recibi: " + nextline);
-            }
-
-            os.write("block");
-            os.newLine();
-            os.flush();
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                System.out.println("Wrong");
-            }
-
-            os.write("unblock");
-            os.newLine();
-            os.flush();
-`           */
         } catch (IOException e) {
+            Log.log(Level.WARNING, "Coulndt Initialize Comp " + identify() + " Buffers");
+            Log.log(Level.WARNING, e.toString());
+            father.hideGUI(identify());
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void run() {
+        System.out.println("Comunication Comp " + identify());
+        try {
+            String nextline;
+            while (true) {
+                nextline = is.readLine();
+                if (nextline != null) {
+                    System.out.println("Comp " + identify() + ": "+ nextline);
+                }
+            }
+
+        } catch (IOException e) {
+            father.hideGUI(identify());
             Log.log(Level.WARNING, "Computer " + computerId + ": Connection Lost");
             Log.log(Level.WARNING, e.toString());
+            
         }
+    }
+    
+    public void BlockSignal(){
+        System.out.println("Attempting to Block Computer: " + identify());
+        try{
+            os.write("blockSignal");
+            os.newLine();
+            os.flush();
+        }catch(IOException e){
+            Log.log(Level.WARNING, "Couldnt Send Block Message");
+            Log.log(Level.WARNING, "Computer " + identify() + ": " + e.toString());
+        }
+    }
+
+    public int identify() {
+        return this.computerId;
     }
 
 }
