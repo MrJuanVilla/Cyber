@@ -54,9 +54,8 @@ public class Computer {
                     message = is.readLine();
                     if (message != null) {
                         System.out.println("Mensaje Servidor: " + message);
-                        if(message.equals("blockSignal")){
-                            if(isBlocked) undoBlock(frame);
-                            else doBlock();
+                        if (message.equals("blockSignal")) {
+                            BlockSwitch();
                         }
                     }
                 }
@@ -71,23 +70,33 @@ public class Computer {
 
     }
 
-    static public void undoBlock(JFrame frame) {
-        isBlocked = false;
-        System.out.println("Computadora Desbloqueada");
-        if (frame != null) {
-            frame.dispose();
-            frame = null;
-        }
-    }
-
-    static public void doBlock() {
+    static public void BlockSwitch() {
+        if (isBlocked) {
+            isBlocked = false;
+            System.out.println("Desbloqueando Computadora");
+            if (frame != null) {
+                frame.dispose();
+                frame = null;
+            }
+        } else {
             isBlocked = true;
-            System.out.println("Computadora Blockeada");
+            System.out.println("Bloqueando Computadora");
             /*invokeLater(new Runnable() {
              public void run() {
              (frame = new PantallaBloqueo()).setVisible(true);
              }
              });*/
+        }
+    }
+
+    static public void doBlock() {
+        isBlocked = true;
+        System.out.println("Bloqueando Computadora");
+        /*invokeLater(new Runnable() {
+         public void run() {
+         (frame = new PantallaBloqueo()).setVisible(true);
+         }
+         });*/
     }
 
 }

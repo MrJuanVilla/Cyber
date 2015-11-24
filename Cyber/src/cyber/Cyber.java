@@ -86,6 +86,8 @@ public class Cyber {
     private static JPanel[] comps;
     private static JButton[] btns;
     private static JLabel[] timers;
+    private static javax.swing.Timer[] clocks;
+    
     
     private static JPanel mainPanel;
 
@@ -125,6 +127,9 @@ public class Cyber {
 
     public void hideGUI(int index){
         comps[index].setVisible(false);
+    }
+    
+    public void reset(int index){
         btns[index].setText("Start");
         timers[index].setText("");
     }
@@ -157,6 +162,16 @@ public class Cyber {
         cellPanel.add(temp,BorderLayout.CENTER);
         cellPanel.add(subPanel, BorderLayout.SOUTH);
         return cellPanel;
+    }
+    
+    public javax.swing.Timer newTimer(JLabel timeLabel){
+        javax.swing.Timer tm = new javax.swing.Timer(10, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //timeLabel.setText();
+            }
+        });
+        return tm;
     }
 
     public JButton pauseButton(int id) {

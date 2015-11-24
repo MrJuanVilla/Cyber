@@ -38,7 +38,7 @@ public class connectionHandler implements Runnable {
             while (true) {
                 nextline = is.readLine();
                 if (nextline != null) {
-                    System.out.println("Comp " + identify() + ": "+ nextline);
+                    System.out.println("Comp " + identify() + ": " + nextline);
                 }
             }
 
@@ -46,20 +46,22 @@ public class connectionHandler implements Runnable {
             father.hideGUI(identify());
             Log.log(Level.WARNING, "Computer " + computerId + ": Connection Lost");
             Log.log(Level.WARNING, e.toString());
-            
+
         }
     }
-    
-    public void BlockSignal(){
+
+    public void BlockSignal() {
         System.out.println("Attempting to Block Computer: " + identify());
-        try{
+        try {
             os.write("blockSignal");
             os.newLine();
             os.flush();
-        }catch(IOException e){
+        } catch (IOException e) {
             Log.log(Level.WARNING, "Couldnt Send Block Message");
             Log.log(Level.WARNING, "Computer " + identify() + ": " + e.toString());
         }
+        father.hideGUI(identify());
+        father.reset(identify());
     }
 
     public int identify() {
